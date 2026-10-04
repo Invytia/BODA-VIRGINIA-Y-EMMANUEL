@@ -135,12 +135,13 @@
         }
 
         .seal {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            width: 65px; height: 65px; background: linear-gradient(135deg, var(--main-dark), var(--main-light));
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            width: 75px; height: 75px; background: linear-gradient(135deg, var(--main-dark), var(--main-light));
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--bg-color); font-family: var(--font-title); font-size: 1.8rem;
+            color: var(--bg-color); font-family: var(--font-title); font-size: 1.8rem; letter-spacing: 2px;
             z-index: 5; transition: opacity 0.3s ease;
             box-shadow: 0 5px 15px rgba(39, 43, 0, 0.4); border: 2px solid var(--gold-light);
+            text-indent: 2px; /* Compensa visualmente el letter-spacing para que se vea centrado */
         }
 
         .envelope-wrapper.open .envelope-flap { transform: rotateX(180deg); z-index: 1; filter: none; }
@@ -290,7 +291,7 @@
         .calendar-day { padding: 10px 0; border-radius: 50%; transition: all 0.3s;}
         .calendar-day.highlight { background: linear-gradient(135deg, var(--main-dark), var(--main-light)); color: var(--white); font-weight: bold; box-shadow: 0 0 15px rgba(39, 43, 0, 0.5);}
 
-        /* Mapas y Ubicaciones */
+        /* Mapas e Imágenes de Ubicaciones */
         .venue-card { width: 100%; margin-bottom: 40px; background: var(--bg-color); padding: 35px 25px; border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid rgba(134, 137, 93, 0.25); transition: transform 0.4s; position: relative; z-index: 2;}
         .venue-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
         .venue-icon { font-size: 2.8rem; color: var(--gold); margin-bottom: 20px; animation: float-icon 3s ease-in-out infinite; display: inline-block;}
@@ -298,6 +299,10 @@
         .venue-name { font-family: var(--font-title); font-size: 2rem; color: var(--main-dark); margin-bottom: 12px; }
         .venue-time { font-family: var(--font-sans); font-weight: 600; font-size: 1.2rem; color: var(--text-color); margin-bottom: 20px; }
         
+        .venue-img-wrapper { width: 100%; height: 220px; overflow: hidden; margin-bottom: 20px; border-radius: 4px; border: 1px solid rgba(134, 137, 93, 0.25); }
+        .venue-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .venue-card:hover .venue-img-wrapper img { transform: scale(1.05); }
+
         .map-iframe-container { width: 100%; height: 240px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(134,137,93,0.3); border-radius: 4px;}
         .map-iframe-container iframe { width: 100%; height: 100%; object-fit: cover; }
 
@@ -315,11 +320,11 @@
         .timeline-time { font-family: var(--font-sans); font-weight: 600; font-size: 1.05rem; color: var(--main-light); letter-spacing: 1px;}
         .timeline-event { font-family: var(--font-title); font-size: 1.4rem; color: var(--main-dark); margin-top: 4px; }
 
-        /* Código de Vestimenta & Mesa de Regalos */
+        /* Código de Vestimenta, Actitud & Mesa de Regalos */
         .dress-code-title { font-family: var(--font-sans); font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 15px; font-weight: 500; position: relative; z-index: 2;}
         .dress-code-main { font-family: var(--font-title); font-size: 3.5rem; margin-bottom: 15px; line-height: 1.1; position: relative; z-index: 2;}
 
-        .no-kids-block { background: transparent; padding: 25px; width: 100%; border-top: 1px solid rgba(134, 137, 93, 0.4); border-bottom: 1px solid rgba(134, 137, 93, 0.4); margin-bottom: 40px; position: relative; z-index: 2;}
+        .attitude-block { background: transparent; padding: 25px; width: 100%; border-top: 1px solid rgba(134, 137, 93, 0.4); border-bottom: 1px solid rgba(134, 137, 93, 0.4); margin-bottom: 40px; position: relative; z-index: 2;}
         .qr-code { width: 160px; height: 160px; margin: 25px 0; border: 2px solid var(--gold); padding: 8px; background: #fff; position: relative; z-index: 2;}
 
         /* Formulario Editorial */
@@ -520,6 +525,11 @@
                     <p class="venue-type">CEREMONIA RELIGIOSA</p>
                     <h3 class="venue-name">Parroquia de Santiago Apóstol</h3>
                     <p class="venue-time">2:00 P.M.</p>
+                    
+                    <div class="venue-img-wrapper">
+                        <img src="assets/iglesia.jpg" alt="Iglesia">
+                    </div>
+
                     <div class="map-iframe-container">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3775.1326779379315!2d-99.1755118!3d18.8811943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ce75eef876ac69%3A0xeeeb0b6dcbc10939!2sParroquia%20de%20Santiago%20Ap%C3%B3stol%20de%20Jiutepec!5e0!3m2!1ses-419!2smx!4v1791139004777!5m2!1ses-419!2smx" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>
@@ -532,6 +542,11 @@
                     <p class="venue-type">RECEPCIÓN</p>
                     <h3 class="venue-name">Romen’s jardín de eventos</h3>
                     <p class="venue-time">4:00 P.M.</p>
+
+                    <div class="venue-img-wrapper">
+                        <img src="assets/salon.jpg" alt="Salón">
+                    </div>
+
                     <div class="map-iframe-container">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3775.0387215487276!2d-99.1972792!3d18.885363299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cddf4f1df84b55%3A0xe4bd4964b78017c7!2sRomen's%20jardin%20de%20eventos!5e0!3m2!1ses-419!2smx!4v1791139049271!5m2!1ses-419!2smx" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>
@@ -563,7 +578,7 @@
                         </div>
                         <div class="timeline-item anim-el fade-in-left" style="transition-delay: 0.4s;">
                             <div class="timeline-icon"><i class="fa-solid fa-music"></i></div>
-                            <div class="timeline-content"><div class="timeline-time">19:00 HRS</div><div class="timeline-event">Música y Celebración</div></div>
+                            <div class="timeline-content"><div class="timeline-time">18:00 HRS</div><div class="timeline-event">Música y Celebración</div></div>
                         </div>
                     </div>
                 </div>
@@ -605,11 +620,11 @@
                     </p>
                 </div>
 
-                <!-- No Niños -->
-                <div class="no-kids-block anim-el fade-in-up">
+                <!-- Actitud Positiva (Reemplaza No Niños) -->
+                <div class="attitude-block anim-el fade-in-up">
                     <p style="font-size: 1.1rem; font-style: italic; line-height: 1.7; margin:0; text-align: center;">
-                        <i class="fa-solid fa-children" style="color: var(--gold); font-size: 2rem; display: block; margin-bottom: 15px; text-shadow: 0 0 10px rgba(134,137,93,0.4); animation: float-icon 3s ease-in-out infinite;"></i>
-                        Para que todos podamos disfrutar de una velada inolvidable, hemos decidido que nuestra boda sea un evento <b>exclusivamente para adultos</b>. Agradecemos profundamente su comprensión.
+                        <i class="fa-solid fa-champagne-glasses" style="color: var(--gold); font-size: 2rem; display: block; margin-bottom: 15px; text-shadow: 0 0 10px rgba(134,137,93,0.4); animation: float-icon 3s ease-in-out infinite;"></i>
+                        El único requisito para esta noche es que vengan con la mejor actitud para divertirse, celebrar y hacer de este evento una experiencia verdaderamente <b>inolvidable</b>. ¡Prepárense para disfrutar!
                     </p>
                 </div>
 
