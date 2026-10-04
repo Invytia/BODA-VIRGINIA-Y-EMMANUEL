@@ -97,17 +97,13 @@
            ========================================================================== */
         #envelope-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background-color: var(--bg-color);
-            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            /* Fondo actualizado a la imagen de assets sin filtros */
+            background: url('assets/fondo.jpg') no-repeat center center;
+            background-size: cover;
+            background-color: var(--bg-color); /* Fallback */
             z-index: 9999; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        .envelope-light-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
-            z-index: 1;
         }
 
         .envelope-wrapper {
@@ -124,9 +120,11 @@
         }
         .envelope-front {
             position: absolute; inset: 0; z-index: 3;
-            border-left: 170px solid #fdfdf9; border-right: 170px solid #fdfdf9;
-            border-bottom: 120px solid #f4f6e6; border-top: 110px solid transparent;
+            /* Sobre ajustado a blanco puro con sombras grises para el efecto 3D */
+            border-left: 170px solid #ffffff; border-right: 170px solid #ffffff;
+            border-bottom: 120px solid #f2f2f2; border-top: 110px solid transparent;
             pointer-events: none;
+            filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.03));
         }
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
@@ -420,7 +418,6 @@
 
     <!-- PANTALLA DEL SOBRE -->
     <div id="envelope-screen">
-        <div class="envelope-light-overlay"></div>
         <div class="envelope-wrapper" onclick="openInvitation()">
             <div class="envelope-front"></div>
             <div class="envelope-flap">
@@ -645,11 +642,6 @@
                 <p class="anim-el fade-in-up" style="font-size: 1.1rem; line-height: 1.7;">¡Queremos ver la boda a través de tus ojos! Escanea o haz clic para compartir tus fotos y videos.</p>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://drive.google.com/drive/folders/1d7cRfH_2CutO8il5PDVDFRflUYMkuBgr?usp=sharing" alt="QR Galería" class="qr-code anim-el scale-in" style="transition-delay: 0.2s;">
                 <a href="https://drive.google.com/drive/folders/1d7cRfH_2CutO8il5PDVDFRflUYMkuBgr?usp=sharing" target="_blank" class="btn anim-el fade-in-up" style="width: 100%;"><i class="fa-brands fa-google-drive"></i> SUBIR MIS FOTOS</a>
-
-                <!-- FOTO 10 -->
-                <div class="photo-wrapper anim-el fade-in-up" style="transition-delay: 0.2s; margin-top: 40px;">
-                    <img src="assets/10.jpg" class="clickable-photo" onclick="openLightbox(this.src)" alt="Amor">
-                </div>
 
                 <!-- RSVP EDITORIAL FORM -->
                 <div class="editorial-form-box anim-el fade-in-up" style="margin-top: 50px;">
