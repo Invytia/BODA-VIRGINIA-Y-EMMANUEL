@@ -97,10 +97,9 @@
            ========================================================================== */
         #envelope-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            /* Fondo actualizado a la imagen de assets sin filtros */
             background: url('assets/fondo.jpg') no-repeat center center;
             background-size: cover;
-            background-color: var(--bg-color); /* Fallback */
+            background-color: var(--bg-color); 
             z-index: 9999; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s ease;
@@ -120,7 +119,6 @@
         }
         .envelope-front {
             position: absolute; inset: 0; z-index: 3;
-            /* Sobre ajustado a blanco puro con sombras grises para el efecto 3D */
             border-left: 170px solid #ffffff; border-right: 170px solid #ffffff;
             border-bottom: 120px solid #f2f2f2; border-top: 110px solid transparent;
             pointer-events: none;
@@ -141,7 +139,7 @@
             color: var(--bg-color); font-family: var(--font-title); font-size: 1.8rem; letter-spacing: 2px;
             z-index: 5; transition: opacity 0.3s ease;
             box-shadow: 0 5px 15px rgba(39, 43, 0, 0.4); border: 2px solid var(--gold-light);
-            text-indent: 2px; /* Compensa visualmente el letter-spacing para que se vea centrado */
+            text-indent: 2px; 
         }
 
         .envelope-wrapper.open .envelope-flap { transform: rotateX(180deg); z-index: 1; filter: none; }
@@ -504,7 +502,10 @@
                     <img src="assets/2.jpg" class="clickable-photo" onclick="openLightbox(this.src)" alt="Novios">
                 </div>
 
-                <button onclick="downloadICS()" class="btn anim-el fade-in-up" style="width: 100%; transition-delay: 0.5s;"><i class="fa-regular fa-calendar-plus"></i> AGREGAR AL CALENDARIO</button>
+                <div style="display: flex; gap: 10px; width: 100%; transition-delay: 0.5s;" class="anim-el fade-in-up">
+                    <button onclick="addCalendar('apple')" class="btn" style="flex: 1; padding: 14px 10px; font-size: 0.75rem;"><i class="fa-brands fa-apple"></i> APPLE / ICS</button>
+                    <button onclick="addCalendar('google')" class="btn" style="flex: 1; padding: 14px 10px; font-size: 0.75rem;"><i class="fa-brands fa-google"></i> GOOGLE</button>
+                </div>
                 
                 <!-- FOTO 3 -->
                 <div class="photo-wrapper anim-el fade-in-up" style="transition-delay: 0.6s; margin-top: 25px;">
@@ -683,10 +684,17 @@
                             </div>
                             <div class="form-group-ed">
                                 <label>Respuesta:</label>
-                                <select id="rsvpAsistencia">
+                                <select id="rsvpAsistencia" onchange="togglePasesSelector()">
                                     <option value="">Selecciona una opción</option>
                                     <option value="¡Sí, asistiré con gusto!">¡Sí, asistiré con gusto!</option>
                                     <option value="Lamentablemente no podré asistir">Lamento no poder acompañarlos</option>
+                                </select>
+                            </div>
+                            <!-- Selector dinámico de pases -->
+                            <div class="form-group-ed" id="selectorPasesContainer" style="display: none;">
+                                <label>Pases a utilizar:</label>
+                                <select id="rsvpLugares">
+                                    <!-- Se llena automáticamente con JS -->
                                 </select>
                             </div>
                         </div>
@@ -842,6 +850,19 @@
                 if (invitado) {
                     document.getElementById('guestNameDisplay').textContent = invitado;
                 }
+
+                // Generar opciones dinámicas para el formulario basado en el número de pases
+                let pasesNum = parseInt(pases);
+                if(pasesNum > 0) {
+                    const selectLugares = document.getElementById('rsvpLugares');
+                    for (let i = 1; i <= pasesNum; i++) {
+                        let option = document.createElement('option');
+                        option.value = i;
+                        option.text = i + (i === 1 ? " lugar" : " lugares");
+                        if (i === pasesNum) option.selected = true; // Por defecto selecciona todos
+                        selectLugares.appendChild(option);
+                    }
+                }
             }
 
             // Countdown - 21 Nov 2026, 14:00 (Llegada)
@@ -868,6 +889,20 @@
             }, 1000);
         });
 
+        // Mostrar u ocultar el selector de pases dependiendo de la respuesta
+        function togglePasesSelector() {
+            const asistencia = document.getElementById('rsvpAsistencia').value;
+            const container = document.getElementById('selectorPasesContainer');
+            const urlParams = new URLSearchParams(window.location.search);
+            let pases = urlParams.get('pases') || urlParams.get('p');
+
+            if (asistencia.includes("Sí") && pases && parseInt(pases) > 0) {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
         // --- 5. ENVIAR RSVP ---
         function sendRSVP(destinatario) {
             const nombre = document.getElementById('rsvpNombre').value.trim();
@@ -883,10 +918,18 @@
                 alert("Por favor, completa tu nombre y estado de asistencia."); 
                 return; 
             }
+
+            // Lógica para redactar el mensaje con el número de pases exactos elegidos
+            let pasesTexto = "";
+            if (asistencia.includes("Sí") && pases && !isNaN(pases)) {
+                let seleccionados = document.getElementById('rsvpLugares').value;
+                pasesTexto = `\n🎟️ Utilizaremos *${seleccionados}* de los ${pases} lugares asignados.`;
+            } else if (pases) {
+                pasesTexto = `\n🎟️ (Tenía ${pases} lugares asignados).`;
+            }
             
             let telefono = destinatario === 'novia' ? telNovia : telNovio;
-            let pasesTexto = pases ? `(Tengo asignados ${pases} lugares)` : "";
-            let mensaje = `✨ Hola, soy *${finalName}* ${pasesTexto}.\n\nQuiero confirmar mi respuesta a la boda de Virginia y Emmanuel: *${asistencia}*\n\n`;
+            let mensaje = `✨ Hola, soy *${finalName}*.\n\nQuiero confirmar mi respuesta a la boda de Virginia y Emmanuel: *${asistencia}* ${pasesTexto}\n\n`;
 
             window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
@@ -903,17 +946,22 @@
             window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
 
-        // --- 7. DESCARGAR ICS ---
-        function downloadICS() {
-            const calData = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda Virginia y Emmanuel//ES\nBEGIN:VEVENT\nDTSTART:20261121T200000Z\nDTEND:20261122T040000Z\nSUMMARY:Boda de Virginia y Emmanuel\nLOCATION:Parroquia de Santiago Apóstol\nDESCRIPTION:¡Acompáñanos a celebrar nuestra boda! Ceremonia religiosa a las 2:00 PM y recepción a las 4:00 PM en Romen's jardín de eventos.\nEND:VEVENT\nEND:VCALENDAR`;
-            const blob = new Blob([calData], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); 
-            a.href = url;
-            a.download = 'Boda_Virginia_y_Emmanuel.ics'; 
-            document.body.appendChild(a); 
-            a.click(); 
-            document.body.removeChild(a);
+        // --- 7. DESCARGAR ICS / ABRIR GOOGLE CALENDAR ---
+        function addCalendar(platform) {
+            if (platform === 'google') {
+                const gCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Virginia+y+Emmanuel&dates=20261121T200000Z/20261122T040000Z&details=%C2%A1Acomp%C3%A1%C3%B1anos%20a%20celebrar%20nuestra%20boda!%20Ceremonia%20religiosa%20a%20las%202%3A00%20PM%20y%20recepci%C3%B3n%20a%20las%204%3A00%20PM%20en%20Romen's%20jard%C3%ADn%20de%20eventos.&location=Parroquia%20de%20Santiago%20Ap%C3%B3stol";
+                window.open(gCalUrl, '_blank');
+            } else {
+                const calData = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda Virginia y Emmanuel//ES\nBEGIN:VEVENT\nDTSTART:20261121T200000Z\nDTEND:20261122T040000Z\nSUMMARY:Boda de Virginia y Emmanuel\nLOCATION:Parroquia de Santiago Apóstol\nDESCRIPTION:¡Acompáñanos a celebrar nuestra boda! Ceremonia religiosa a las 2:00 PM y recepción a las 4:00 PM en Romen's jardín de eventos.\nEND:VEVENT\nEND:VCALENDAR`;
+                const blob = new Blob([calData], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); 
+                a.href = url;
+                a.download = 'Boda_Virginia_y_Emmanuel.ics'; 
+                document.body.appendChild(a); 
+                a.click(); 
+                document.body.removeChild(a);
+            }
         }
     </script>
 </body>
