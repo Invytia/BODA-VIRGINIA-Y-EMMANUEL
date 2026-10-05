@@ -502,9 +502,13 @@
                     <img src="assets/2.jpg" class="clickable-photo" onclick="openLightbox(this.src)" alt="Novios">
                 </div>
 
-                <div style="display: flex; gap: 10px; width: 100%; transition-delay: 0.5s;" class="anim-el fade-in-up">
-                    <button onclick="addCalendar('apple')" class="btn" style="flex: 1; padding: 14px 10px; font-size: 0.75rem;"><i class="fa-brands fa-apple"></i> APPLE / ICS</button>
-                    <button onclick="addCalendar('google')" class="btn" style="flex: 1; padding: 14px 10px; font-size: 0.75rem;"><i class="fa-brands fa-google"></i> GOOGLE</button>
+                <!-- BOTONES DE CALENDARIO -->
+                <div class="anim-el fade-in-up" style="width: 100%; margin-top: 15px; transition-delay: 0.5s;">
+                    <p style="font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 2px; color: var(--main-light); font-weight: 600; margin-bottom: 10px;"><i class="fa-regular fa-calendar-plus" style="margin-right: 5px;"></i> AGREGAR AL CALENDARIO</p>
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <button onclick="addCalendar('apple')" class="btn" style="flex: 1; padding: 14px 5px; font-size: 0.75rem; margin-top: 0;"><i class="fa-brands fa-apple"></i> APPLE</button>
+                        <button onclick="addCalendar('google')" class="btn" style="flex: 1; padding: 14px 5px; font-size: 0.75rem; margin-top: 0;"><i class="fa-brands fa-google"></i> GOOGLE</button>
+                    </div>
                 </div>
                 
                 <!-- FOTO 3 -->
